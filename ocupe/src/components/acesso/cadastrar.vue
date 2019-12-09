@@ -2,46 +2,50 @@
 <main class="obec-page">
   <section>
     <div id="obec-login-register">
+      <br><br><br><br><br>
       <div class="container">
         <div class="row">
           <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-8 col-xs-offset-2">
             <div class="panel panel-default">
               <div class="panel-heading">
+                <router-link :to="{ name: 'login'}">
                 <a class="btn btn-default navbar-btn pull-left">
                   <span class="glyphicon glyphicon-chevron-left"></span>
                 </a>
-                <h3 class="text-center">Sua Conta</h3>
+                </router-link>
+                <h3 class="text-center">Cadastre Sua Conta {{senha2}}</h3>
               </div>
               <div class="panel-body">
 
                 <form class="form-horizontal">
 
-                  <div class="form-group">
-                    <input name="email">
-                      <label class="input-group-addon" for="email">
-                        <span class="glyphicon glyphicon-envelope"></span>
-                      </label>
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input type="email" v-model="nome" class="form-control" name="user" placeholder="Nome Autor">
                   </div>
 
-                  <div class="form-group">
-                    <input type="password" name="password">
-                      <label class="input-group-addon" for="password">
-                        <span class="glyphicon glyphicon-lock"></span>
-                      </label>
+                  <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">@</span>
+                    <input type="email" v-model="email" class="form-control" name="email" placeholder="Email">
                   </div>
 
-                  <div class="form-group">
-                    <input type="repeatPassword">
-                      <label class="input-group-addon" for="repeatPassword">
-                        <span class="glyphicon glyphicon-lock"></span>
-                      </label>
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                    <input type="password" v-model="senha" class="form-control" name="senha" placeholder="Senha">
+                  </div>
+
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                    <input type="password" v-model="senha2" class="form-control" name="senha2" placeholder="Confirmar Senha">
                   </div>
 
                   <div class="form-group">
                     <div class="col-xs-offset-2">
-                      <button type="submit" class="btn btn-default obec-btn-pattern" id="entrar">
-                        <i class='fa fa-spinner fa-spin '></i>Cadastrar
-                      </button>
+                      <!-- <router-link :to="{ name: 'login'}"> -->
+                        <button @click.prevent.stop="salvar()" class="btn btn-default obec-btn-pattern">
+                         <i v-if="enviando" class='fa fa-spinner fa-spin '></i>Cadastrar
+                       </button>
+                      <!-- </router-link> -->
                     </div>
                   </div>
                 </form>
@@ -58,8 +62,33 @@
 
 
 <script>
+import axios from 'axios';
+
 export default {
     name: "cadastrar",
+    data() {
+      return {
+        nome: 'a',
+        email: 'dqrtec@hotmail.com',
+        senha: 'a',
+        senha2: 'a',
+        enviando: false,
+      };
+    },
+    methods:{
+      salvar(){
+
+        let headers = {headers: {'Accept': 'application/json','Content-Type': 'application/json'}}
+
+        this.enviando = true
+        if(this.nome!="" && this.email!="" && this.senha!="" && this.senha2 == this.senha ){
+          axios.post('http://localhost:3000/api/user', {rad_email:this.email, rad_senha:this.senha, rad_autor: this.nome}, headers)
+            .then(function(){
+              this.enviando = false
+            })
+        }
+      }
+    }
 }
 
 </script>

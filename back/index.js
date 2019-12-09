@@ -1,9 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const app = express();
+const cors = require('cors');
 const mysql = require('mysql');
- 
-// parse application/json
+
+const app = express();
+
+app.use(cors());
+
 app.use(bodyParser.json());
 
 app.use(function(req, res, next){
@@ -54,15 +57,16 @@ app.get('/api/endereco',(req, res) => {
 //   });
 // });
  
-// //add new product
-// app.post('/api/products',(req, res) => {
-//   let data = {product_name: req.body.product_name, product_price: req.body.product_price};
-//   let sql = "INSERT INTO product SET ?";
-//   let query = conn.query(sql, data,(err, results) => {
-//     if(err) throw err;
-//     res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
-//   });
-// });
+//add new product
+app.post('/api/user',(req, res) => {
+
+  let data = {rad_email: req.body.rad_email, rad_senha: req.body.rad_senha, rad_autor: req.body.rad_autor};
+  let sql = "INSERT INTO radar SET ?";
+  let query = conn.query(sql, data,(err, results) => {
+    if(err) throw err;
+    res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+  });
+});
  
 // //update product
 // app.put('/api/products/:id',(req, res) => {

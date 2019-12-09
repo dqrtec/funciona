@@ -2,6 +2,7 @@
 <main class="obec-page">
   <section>
     <div id="obec-login-register">
+      <br><br><br><br><br>
       <div class="container">
         <div class="row">
           <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-8 col-xs-offset-2">
@@ -14,16 +15,16 @@
 
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                    <input class="form-control" name="email">
+                    <input class="form-control" name="email" placeholder="Email">
                   </div>
 
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                    <input type="password" class="form-control" name="email">
+                    <input type="password" class="form-control" name="senha" placeholder="Senha">
                   </div>
 
                   <p class="text-center">
-                    <a >Criar conta AGORA.	</a>
+                    <router-link :to="{ name: 'cadastrar'}"><a >Criar conta AGORA.	</a></router-link>
                   </p>
 
                   <div class="form-group">
