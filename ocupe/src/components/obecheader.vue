@@ -1,32 +1,40 @@
 <template>
-  <div class="container obec-header">
-    <nav class="navbar navbar-fixed-top navbar-default  obec-navbar">
-      <div class="container">
+<nav class="navbar navbar-default navbar-fixed-top obec-navbar">
+  <div class="container">
 
-        <div class="navbar-header obec-navbar">
-          <router-link :to="{ name: 'obecheader'}">
-            <a>
-            <img alt="Brand" src="../assets/observatorio.png" class="img-responsive" height="144" width="200">
-            </a>
-          </router-link>
-        </div>
-
+    <div class="navbar-header obec-navbar">
+      <button type="button" class="navbar-toggle collapsed obec-iconbar" data-toggle="collapse"
+              data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <router-link :to="{ name: 'obecheader'}">
+        <a>
+        <img alt="Brand" src="../assets/observatorio.png" class="img-responsive" height="144" width="200">
+        </a>
+      </router-link>
+      
+    </div>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-left obec-navbar-option">
-        <li ><a ><router-link :to="{ name: 'obecheader'}">Home</router-link></a></li>
-        <li ><a ><router-link :to="{ name: 'radarabout'}">Radar</router-link></a></li>
-        <li ><a ><router-link :to="{ name: 'revista'}">Revista</router-link></a></li>
-        <li ><a ><router-link :to="{ name: 'pecriativo'}">PE Criativo</router-link></a></li>
-        <li ><a ><router-link :to="{ name: 'seminarios'}">Seminários</router-link></a></li>
-        <li ><a ><router-link :to="{ name: 'eventoabout'}">Eventos</router-link></a></li>
+        <li ><router-link :to="{ name: 'obecheader'}"><a >Home<span class="sr-only">(current)</span></a></router-link></li>
+        <li ><router-link :to="{ name: 'radarabout'}"><a >Radar</a></router-link></li>
+        <li ><router-link :to="{ name: 'revista'}"><a >Revista</a></router-link></li>
+        <li ><router-link :to="{ name: 'pecriativo'}"><a >PE Criativo</a></router-link></li>
+        <li ><router-link :to="{ name: 'seminarios'}"><a >Seminários</a></router-link></li>
+        <li ><router-link :to="{ name: 'eventoabout'}"><a >Eventos</a></router-link></li>
       </ul>
 
       <a class="btn btn-default navbar-btn navbar-right obec-btn-login"><i
-        class="fa fa-sign-in fa-fw"></i><router-link :to="{ name: 'login'}">Entrar</router-link></a>
+    class="fa fa-sign-in fa-fw"></i><router-link :to="{ name: 'login'}">Entrar</router-link></a>
+    </div>
 
-      </div>
-    </nav>
-    
+  
+
   </div>
+</nav>
 </template>
 
 <script>

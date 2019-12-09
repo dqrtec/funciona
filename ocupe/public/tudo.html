@@ -58,17 +58,17 @@
     </div>
 <br>
     <div class="form-group" style="flex: 1;">
-        <select class="form-control">
+        <select class="form-control" v-model="categoriasFiltro">
             <option value="">Escolha sua categoria</option>
-            <option value="Indivíduo">Indivíduo</option>
+            <option value="Individuo">Indivíduo</option>
             <option value="Coletivo">Coletivo</option>
-            <option value="Equipamentos Culturais">Equipamentos Culturais</option>
+            <option value="EquipamentosCulturais">Equipamentos Culturais</option>
         </select>
     </div>
 
-    <select class="form-control" formcontrolname="segments" style="flex: 1;">
+    <select class="form-control" v-model="segmentosFiltro" style="flex: 1;">
         <option value="">Escolha segmentos</option>
-        <option>Arquitetura</option>
+        <option value="1">Arquitetura</option>
         <option>Artes Cênicas</option>
         <option>Artes Visuais</option>
         <option>Artesanato</option>
@@ -166,59 +166,76 @@ var redIcon = new L.Icon({
 var app = new Vue({
     el: '#tudo',
     data: {
+        radaresFiltros: [],
+        radaresMapa: [],
         radares: [],
         locais: [],
         escolhido: null,
         cidades:[],
         cidadeFiltro:"",
         tags:[],
-        tagFiltro:""
+        tagFiltro:"",
+        categoriasFiltro:"",
+        segmentosFiltro:""
     },
     methods: {
 
     },
     watch:{
         escolhido(novoValor,antigoValor){
-            for(let i=0; i< this.radares.length ;i++){
-            for(let j=0; j< this.locais.length ;j++){
-                if(this.radares[i]["rad_end_id"] == this.locais[j]["end_id"] ){
-                    if(this.escolhido["rad_end_id"] ==  this.locais[j]["end_id"] ){
-                        marcar(this.locais[j]["end_latitude"], this.locais[j]["end_longitude"], 1, this.radares[i]["rad_titulo"])
-                    }else{
-                        marcar(this.locais[j]["end_latitude"], this.locais[j]["end_longitude"], 0, this.radares[i]["rad_titulo"])
-                    }
-                    break
+            this.radaresFiltros = this.radares
+            for(let i=0; i< this.radaresFiltros.length ;i++){
+                desmarcar( this.radaresFiltros[i]["marcador"] )
+                if(this.escolhido["rad_end_id"] ==  this.radaresFiltros[i]["rad_end_id"] ){
+                    marcador = marcar(this.radaresFiltros[i]["lat"], this.radaresFiltros[i]["long"], 1, this.radaresFiltros[i]["rad_titulo"])
+                }else{
+                    marcador = marcar(this.radaresFiltros[i]["lat"], this.radaresFiltros[i]["long"], 0, this.radaresFiltros[i]["rad_titulo"])
                 }
-            }
+                this.radaresFiltros[i]["marcador"] = marcador
             }
         },
         cidadeFiltro(novoValor,antigoValor){
-            for(let i=0; i< this.radares.length ;i++){
+            this.radaresFiltros = this.radares
+            listaAuxiliar = []
+            for(let i=0; i< this.radaresFiltros.length ;i++){
+                desmarcar( this.radaresFiltros[i]["marcador"] )
             for(let j=0; j< this.locais.length ;j++){
-                if(this.radares[i]["rad_end_id"] == this.locais[j]["end_id"] ){
+                if(this.radaresFiltros[i]["rad_end_id"] == this.locais[j]["end_id"] ){
                     if( novoValor ==  this.locais[j]["end_cidade"] ){
-                        marcar(this.locais[j]["end_latitude"], this.locais[j]["end_longitude"], 2, this.radares[i]["rad_titulo"])
-                    }else{
-                        marcar(this.locais[j]["end_latitude"], this.locais[j]["end_longitude"], 0, this.radares[i]["rad_titulo"])
+                        marcador = marcar(this.locais[j]["end_latitude"], this.locais[j]["end_longitude"], 2, this.radares[i]["rad_titulo"])
+                        this.radaresFiltros[i]["marcador"] = marcador
+                        listaAuxiliar.push( this.radaresFiltros[i] )
+                        break
                     }
                 }
             }
             }
+            this.radaresFiltros = listaAuxiliar
         },
         tagFiltro(novoValor,antigoValor){
-            for(let i=0; i< this.radares.length ;i++){
-            for(let j=0; j< this.locais.length ;j++){
-                if(this.radares[i]["rad_end_id"] == this.locais[j]["end_id"] ){
-                    if(this.radares[i]["rad_tags"].split(" ").includes(novoValor)){
-                        marcar(this.locais[j]["end_latitude"], this.locais[j]["end_longitude"], 2, this.radares[i]["rad_titulo"])
-                    }else{
-                        marcar(this.locais[j]["end_latitude"], this.locais[j]["end_longitude"], 0, this.radares[i]["rad_titulo"])
-                    }
+            this.radaresFiltros = this.radares
+            for(let i=0; i< this.radaresFiltros.length ;i++){
+                desmarcar( this.radaresFiltros[i]["marcador"] )
+                if(this.radaresFiltros[i]["rad_tags"].split(" ").includes(novoValor)){
+                    marcador = marcar(this.radaresFiltros[i]["lat"], this.radaresFiltros[i]["long"], 2, this.radares[i]["rad_titulo"])
+                    this.radaresFiltros[i]["marcador"] = marcador
                 }
             }
+        },
+        segmentosFiltro(novoValor,antigoValor){
+            this.radaresFiltros = this.radares
+            for(let i=0; i< this.radaresFiltros.length ;i++){
+                desmarcar( this.radaresFiltros[i]["marcador"] )
+                if(this.radaresFiltros[i]["rad_seg_id"] == novoValor){
+                    marcador = marcar(this.radaresFiltros[i]["lat"], this.radaresFiltros[i]["long"], 2, this.radares[i]["rad_titulo"])
+                    this.radaresFiltros[i]["marcador"] = marcador
+                }
             }
         }
 
+    },
+    computed:{
+        
     },
     mounted: function () {
         axios.get("http://localhost:3000/api/radar").then( (ra)=>{
@@ -232,11 +249,14 @@ var app = new Vue({
                     for(let j=0; j< this.locais.length ;j++){
                         if(this.radares[i]["rad_end_id"] == this.locais[j]["end_id"] ){
                             if (!(this.locais[j]["end_cidade"] in this.cidades)){ this.cidades.push(this.locais[j]["end_cidade"])}
-                            marcar( this.locais[j]["end_latitude"], this.locais[j]["end_longitude"], 0 ,this.radares[i]["rad_titulo"])
+                            marcador = marcar( this.locais[j]["end_latitude"], this.locais[j]["end_longitude"], 0 ,this.radares[i]["rad_titulo"])
+                            this.radares[i]["lat"] = this.locais[j]["end_latitude"]
+                            this.radares[i]["long"] = this.locais[j]["end_longitude"]
+                            this.radares[i]["marcador"] = marcador
                         }
                     }
                 }
-
+                this.radaresFiltros = this.radares
             })
         })
 
@@ -244,14 +264,19 @@ var app = new Vue({
 })
 
 function marcar(x,y,cor,titulo){
+    marcador = null
     if(cor == 1){
-        L.marker([ x, y ], {icon: redIcon},title=titulo).addTo(mymap).bindPopup(titulo).openPopup();
+        marcador = L.marker([ x, y ], {icon: redIcon},title=titulo).addTo(mymap).bindPopup(titulo).openPopup();
     }else if(cor == 2){
-        L.marker([ x, y ], {icon: greenIcon},title=titulo).addTo(mymap).bindPopup(titulo).openPopup();
+        marcador = L.marker([ x, y ], {icon: greenIcon},title=titulo).addTo(mymap).bindPopup(titulo).openPopup();
     }else{
-        L.marker([ x, y ],title='titulo').addTo(mymap).bindPopup(titulo).openPopup();
+        marcador = L.marker([ x, y ],title='titulo').addTo(mymap).bindPopup(titulo).openPopup();
     }
-    
+    return marcador
+}
+
+function desmarcar(marcador){
+    mymap.removeLayer(marcador)
 }
 
 </script>
