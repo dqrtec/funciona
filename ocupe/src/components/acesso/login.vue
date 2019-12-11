@@ -11,16 +11,16 @@
                 <h3 class="text-center">Autenticação de login</h3>
               </div>
               <div class="panel-body">
-                <form class="form-horizontal" action="/#/painel">
+                <form class="form-horizontal">
 
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                    <input class="form-control" name="email" placeholder="Email">
+                    <input v-model="email" class="form-control" name="email" placeholder="Email">
                   </div>
 
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                    <input type="password" class="form-control" name="senha" placeholder="Senha">
+                    <input v-model="senha" type="password" class="form-control" name="senha" placeholder="Senha">
                   </div>
 
                   <p class="text-center">
@@ -29,10 +29,9 @@
 
                   <div class="form-group">
                     <div class="col-xs-offset-2">
-                      <router-link :to="{ name: 'painel'}"><button class="btn btn-default obec-btn-pattern">
-                        Entrar
-                       </button>
-                      </router-link>
+                      <button @click.prevent.stop="autenticar()" class="btn btn-default obec-btn-pattern">
+                        <i v-if="enviando" class='fa fa-spinner fa-spin '></i>Entrar
+                      </button>
                     </div>
                   </div>
                 </form>
@@ -48,8 +47,35 @@
 
 
 <script>
+import axios from 'axios';
+
 export default {
-    name: "login",    
+    name: "login",
+    data() {
+      return {
+        email: 'b@hotmail.com',
+        senha: 'b',
+        enviando: false,
+        dados:[]
+      };
+    },
+    methods:{
+      autenticar(){
+
+        let headers = {headers: {'Accept': 'application/json','Content-Type': 'application/json'}}
+        this.enviando = true
+        if(this.email!="" && this.senha!=""){
+          axios.post('http://localhost:3000/api/user/login', {rad_email:this.email, rad_senha:this.senha}, headers)
+            .then(function(usuarios){
+              self.dados = usuarios.data.response
+              console.log(self.dados[0])
+              if(usuarios.data.response[0] != null){
+                window.location.replace("http://localhost:8080/#/painel/?radar="+usuarios.data.response[0]["rad_role"]);
+              }
+            })
+        }
+      }
+    },
 }
 
 </script>

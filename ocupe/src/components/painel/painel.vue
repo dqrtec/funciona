@@ -3,7 +3,7 @@
 <div>
     <main>
       <br><br><br><br><br><br>
-      <ul class="nav navbar-nav navbar-left obec-navbar-option">
+      <ul class="nav navbar-nav">
         <li >
           <a>
             <button class="btn">
@@ -16,7 +16,15 @@
           <a >
             <button class="btn disabled">
             <i class="glyphicon glyphicon-calendar"></i>
-            <p>Eventos</p>
+            <p>Evento</p>
+            </button>
+          </a>
+        </li>
+        <li >
+          <a>
+            <button class="btn">
+              <i class="glyphicon glyphicon-user"></i>
+              <p>Perfil</p>
             </button>
           </a>
         </li>

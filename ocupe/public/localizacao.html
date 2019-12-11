@@ -1,0 +1,76 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+        <link rel="stylesheet" href="tudo.css"/>
+
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+        crossorigin=""/>
+     
+        <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+        crossorigin=""></script>
+    </head>
+    <body>
+        <div id="app">
+            Latitude = <strong>{{latitude}}</strong>
+            <br>
+            Longitude = <strong>{{longitude}}</strong>
+        </div>
+
+        <div id="mapid"></div>
+
+        <script type="text/javascript">
+            var mymap = L.map('mapid').setView([-8.053790678898539, -34.94613647460938], 9);
+
+            
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mapbox/streets-v11',
+                accessToken: 'pk.eyJ1Ijoienp6bWF0YSIsImEiOiJjazNrZXMyY3AwdDdyM2Vrb3dsNTI0YTlrIn0.SgQDM12DwWHXjdrPqLoFOw'
+            }).addTo(mymap);
+
+            function onClick(e){
+                if(app.marcador != null){
+                    mymap.removeLayer(app.marcador)
+                }
+
+                lat = e.latlng.lat;
+                app.latitude = lat
+                long = e.latlng.lng;
+                app.longitude = long
+
+                marker = L.marker([lat, long]).addTo(mymap);
+                app.marcador = marker
+                
+            }
+
+            mymap.on('click', onClick);
+            
+        </script>
+    </body>
+
+
+<div id="tudo">
+</div>
+
+<script>
+var app = new Vue({
+    el: '#app',
+    data: {
+        latitude:0,
+        longitude:0,
+        marcador:null
+    },
+})
+</script>
+
+</html>

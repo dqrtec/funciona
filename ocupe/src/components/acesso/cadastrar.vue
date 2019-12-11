@@ -41,11 +41,9 @@
 
                   <div class="form-group">
                     <div class="col-xs-offset-2">
-                      <!-- <router-link :to="{ name: 'login'}"> -->
                         <button @click.prevent.stop="salvar()" class="btn btn-default obec-btn-pattern">
                          <i v-if="enviando" class='fa fa-spinner fa-spin '></i>Cadastrar
                        </button>
-                      <!-- </router-link> -->
                     </div>
                   </div>
                 </form>
@@ -68,27 +66,30 @@ export default {
     name: "cadastrar",
     data() {
       return {
-        nome: 'a',
-        email: 'dqrtec@hotmail.com',
-        senha: 'a',
-        senha2: 'a',
+        nome: 'b',
+        email: 'b@hotmail.com',
+        senha: 'b',
+        senha2: 'b',
         enviando: false,
       };
     },
     methods:{
+      alertar(){
+        alert("Usuário cadastrado com sucesso")
+      },
       salvar(){
 
         let headers = {headers: {'Accept': 'application/json','Content-Type': 'application/json'}}
-
         this.enviando = true
         if(this.nome!="" && this.email!="" && this.senha!="" && this.senha2 == this.senha ){
           axios.post('http://localhost:3000/api/user', {rad_email:this.email, rad_senha:this.senha, rad_autor: this.nome}, headers)
             .then(function(){
-              this.enviando = false
+              alert("Usuário cadastrado com sucesso")
+              window.location.replace("http://localhost:8080/#/login");
             })
         }
       }
-    }
+    },
 }
 
 </script>

@@ -48,14 +48,14 @@ app.get('/api/endereco',(req, res) => {
   });
 });
  
-// //show single product
-// app.get('/api/products/:id',(req, res) => {
-//   let sql = "SELECT * FROM product WHERE product_id="+req.params.id;
-//   let query = conn.query(sql, (err, results) => {
-//     if(err) throw err;
-//     res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
-//   });
-// });
+//show single product
+app.get('/api/radar/:id',(req, res) => {
+  let sql = "SELECT * FROM radar WHERE rad_role="+req.params.id;
+  let query = conn.query(sql, (err, results) => {
+    if(err) throw err;
+    res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+  });
+});
  
 //add new product
 app.post('/api/user',(req, res) => {
@@ -67,15 +67,25 @@ app.post('/api/user',(req, res) => {
     res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
   });
 });
+
+app.post('/api/user/login',(req, res) => {
+  let sql = "select * from radar where rad_email LIKE '"+req.body.rad_email+"' and rad_senha LIKE '"+req.body.rad_senha+"'";
+  let query = conn.query(sql, (err, results) => {
+    if(err) throw err;
+    res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+  });
+});
  
-// //update product
-// app.put('/api/products/:id',(req, res) => {
-//   let sql = "UPDATE product SET product_name='"+req.body.product_name+"', product_price='"+req.body.product_price+"' WHERE product_id="+req.params.id;
-//   let query = conn.query(sql, (err, results) => {
-//     if(err) throw err;
-//     res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
-//   });
-// });
+//update product
+app.post('/api/radar/atualizar/',(req, res) => {
+  let data = {rad_titulo:req.body.rad_titulo, rad_tags:req.body.rad_tags, rad_informacao_adicional:req.body.rad_informacao_adicional, rad_descricao:req.body.rad_descricao}
+  console.log(data)
+  let sql = "UPDATE radar SET ? WHERE rad_role="+req.body.rad_role;
+  let query = conn.query(sql, data ,(err, results) => {
+    if(err) throw err;
+    res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+  });
+});
  
 // //Delete product
 // app.delete('/api/products/:id',(req, res) => {
