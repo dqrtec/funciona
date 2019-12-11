@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 09-Dez-2019 às 23:15
+-- Tempo de geração: 11-Dez-2019 às 22:52
 -- Versão do servidor: 10.4.10-MariaDB
 -- versão do PHP: 7.1.33
 
@@ -118,7 +118,7 @@ INSERT INTO `habilidade_segmento` (`hs_hab_id`, `hs_seg_id`) VALUES
 CREATE TABLE `radar` (
   `rad_email` varchar(30) NOT NULL,
   `rad_senha` varchar(20) NOT NULL,
-  `rad_role` varchar(30) DEFAULT NULL,
+  `rad_role` int(30) NOT NULL,
   `rad_informacao_adicional` varchar(400) DEFAULT NULL,
   `rad_end_id` int(11) DEFAULT NULL,
   `rad_autor` varchar(70) NOT NULL,
@@ -135,9 +135,10 @@ CREATE TABLE `radar` (
 --
 
 INSERT INTO `radar` (`rad_email`, `rad_senha`, `rad_role`, `rad_informacao_adicional`, `rad_end_id`, `rad_autor`, `rad_categoria`, `rad_descricao`, `rad_seg_id`, `rad_tags`, `rad_servicos`, `rad_titulo`) VALUES
-('daniel@123', '123', 'daniel', 'trabalha com artesanato', 1, 'desafiando o sistema ', 'cat 1', 'sempre i no vando', 1, 'artesanato jovem', 'sarvico 1', 'como desfiar'),
-('dqrtec@hotmail.com', 'a', NULL, NULL, NULL, 'a', NULL, NULL, NULL, NULL, NULL, NULL),
-('recife@recife.com', '123', '1', 'vendemos artes', 3, 'juninho pernambuco', NULL, NULL, NULL, 'telas', 'produção de telas', 'Telas a 8 arte');
+('recife@recife.com', '123', 1, 'vendemos artes', 3, 'juninho pernambuco', NULL, NULL, NULL, 'telas', 'produção de telas', 'Telas a 8 arte'),
+('dqrtec@hotmail.com', 'a', 2, NULL, NULL, 'a', NULL, NULL, NULL, NULL, NULL, NULL),
+('daniel@123', '123', 3, 'trabalha com artesanato', 1, 'desafiando o sistema ', 'cat 1', 'sempre i', 1, 'artesanato jovem infantil', 'sarvico 1', 'como desfiar daniel'),
+('b@hotmail.com', 'b', 4, NULL, NULL, 'b', NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -192,7 +193,8 @@ ALTER TABLE `habilidade_segmento`
 -- Índices para tabela `radar`
 --
 ALTER TABLE `radar`
-  ADD PRIMARY KEY (`rad_email`),
+  ADD PRIMARY KEY (`rad_role`),
+  ADD UNIQUE KEY `rad_email` (`rad_email`),
   ADD KEY `const_rad_end` (`rad_end_id`),
   ADD KEY `const_rad_seg` (`rad_seg_id`);
 
@@ -223,6 +225,12 @@ ALTER TABLE `evento`
 --
 ALTER TABLE `habilidade`
   MODIFY `hab_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de tabela `radar`
+--
+ALTER TABLE `radar`
+  MODIFY `rad_role` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de tabela `segmento`
