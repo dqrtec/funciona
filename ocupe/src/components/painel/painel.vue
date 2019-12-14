@@ -22,7 +22,7 @@
         </li>
         <li >
           <a>
-            <button class="btn">
+            <button class="btn disabled">
               <i class="glyphicon glyphicon-user"></i>
               <p>Perfil</p>
             </button>

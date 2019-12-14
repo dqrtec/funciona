@@ -118,7 +118,7 @@
                         </div>
                         <div class="card-extra text-center">
                         <a >
-                            <button type="button" class="btn obec-blue-btn">Ver</button>
+                            <button type="button" class="btn obec-blue-btn disabled">Ver</button>
                         </a>
                         </div>
                     </div>
@@ -240,21 +240,29 @@ var app = new Vue({
     mounted: function () {
         axios.get("http://localhost:3000/api/radar").then( (ra)=>{
             this.radares = ra.data.response
-        
+
+            let aux = []
+            for (let index = 0; index < this.radares.length; index++) {
+                if(this.radares[index]["rad_end_id"]!= null){
+                    aux.push( this.radares[index] )
+                }
+            }
+            this.radares = aux
+
             axios.get("http://localhost:3000/api/endereco").then( (en)=>{
                 this.locais = en.data.response
 
                 for(let i=0; i< this.radares.length ; i++){
-                    this.radares[i]["rad_tags"].split(" ").map( (dado)=>{if (!(dado in this.tags)){ this.tags.push(dado)}})
-                    for(let j=0; j< this.locais.length ;j++){
-                        if(this.radares[i]["rad_end_id"] == this.locais[j]["end_id"] ){
-                            if (!(this.locais[j]["end_cidade"] in this.cidades)){ this.cidades.push(this.locais[j]["end_cidade"])}
-                            marcador = marcar( this.locais[j]["end_latitude"], this.locais[j]["end_longitude"], 0 ,this.radares[i]["rad_titulo"])
-                            this.radares[i]["lat"] = this.locais[j]["end_latitude"]
-                            this.radares[i]["long"] = this.locais[j]["end_longitude"]
-                            this.radares[i]["marcador"] = marcador
+                        this.radares[i]["rad_tags"].split(" ").map( (dado)=>{if (!(dado in this.tags)){ this.tags.push(dado)}})
+                        for(let j=0; j< this.locais.length ;j++){
+                            if(this.radares[i]["rad_end_id"] == this.locais[j]["end_id"] ){
+                                if (!(this.locais[j]["end_cidade"] in this.cidades)){ this.cidades.push(this.locais[j]["end_cidade"])}
+                                marcador = marcar( this.locais[j]["end_latitude"], this.locais[j]["end_longitude"], 0 ,this.radares[i]["rad_titulo"])
+                                this.radares[i]["lat"] = this.locais[j]["end_latitude"]
+                                this.radares[i]["long"] = this.locais[j]["end_longitude"]
+                                this.radares[i]["marcador"] = marcador
+                            }
                         }
-                    }
                 }
                 this.radaresFiltros = this.radares
             })

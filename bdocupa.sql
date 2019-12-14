@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.2
+-- version 4.8.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 11-Dez-2019 às 22:52
--- Versão do servidor: 10.4.10-MariaDB
--- versão do PHP: 7.1.33
+-- Generation Time: 14-Dez-2019 às 01:02
+-- Versão do servidor: 10.1.37-MariaDB
+-- versão do PHP: 7.3.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Banco de dados: `bdocupa`
+-- Database: `bdocupa`
 --
 
 -- --------------------------------------------------------
@@ -40,15 +40,6 @@ CREATE TABLE `endereco` (
   `end_longitude` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Extraindo dados da tabela `endereco`
---
-
-INSERT INTO `endereco` (`end_id`, `end_cidade`, `end_distrito`, `end_numero`, `end_rua`, `end_complemento`, `end_cep`, `end_latitude`, `end_longitude`) VALUES
-(1, 'Recife', 'pernambuco', 785, 'rua do limoeiro', 'predio', '607514', -8.0514257, -34.9385107),
-(2, 'Recife', NULL, NULL, NULL, '', NULL, -8.0547881, -34.9537796),
-(3, 'Camaragibe', NULL, NULL, NULL, '', NULL, -8.0084991, -35.0372609);
-
 -- --------------------------------------------------------
 
 --
@@ -61,53 +52,6 @@ CREATE TABLE `evento` (
   `eve_end_id` int(11) DEFAULT NULL,
   `eve_descricao` varchar(400) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Extraindo dados da tabela `evento`
---
-
-INSERT INTO `evento` (`eve_id`, `eve_titulo`, `eve_end_id`, `eve_descricao`) VALUES
-(1, 'Libertação das Mentes Criativas', 1, 'envento feito pela secretaria de cultura');
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `habilidade`
---
-
-CREATE TABLE `habilidade` (
-  `hab_id` int(11) NOT NULL,
-  `hab_nome` varchar(60) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Extraindo dados da tabela `habilidade`
---
-
-INSERT INTO `habilidade` (`hab_id`, `hab_nome`) VALUES
-(1, 'madeira'),
-(2, 'pedra'),
-(3, 'barro'),
-(5, 'daniel update');
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `habilidade_segmento`
---
-
-CREATE TABLE `habilidade_segmento` (
-  `hs_hab_id` int(11) NOT NULL,
-  `hs_seg_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Extraindo dados da tabela `habilidade_segmento`
---
-
-INSERT INTO `habilidade_segmento` (`hs_hab_id`, `hs_seg_id`) VALUES
-(2, 2),
-(3, 1);
 
 -- --------------------------------------------------------
 
@@ -124,122 +68,61 @@ CREATE TABLE `radar` (
   `rad_autor` varchar(70) NOT NULL,
   `rad_categoria` varchar(400) DEFAULT NULL,
   `rad_descricao` varchar(400) DEFAULT NULL,
-  `rad_seg_id` int(11) DEFAULT NULL,
+  `rad_seg` varchar(40) DEFAULT NULL,
   `rad_tags` varchar(400) DEFAULT NULL,
   `rad_servicos` varchar(400) DEFAULT NULL,
   `rad_titulo` varchar(400) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Extraindo dados da tabela `radar`
---
-
-INSERT INTO `radar` (`rad_email`, `rad_senha`, `rad_role`, `rad_informacao_adicional`, `rad_end_id`, `rad_autor`, `rad_categoria`, `rad_descricao`, `rad_seg_id`, `rad_tags`, `rad_servicos`, `rad_titulo`) VALUES
-('recife@recife.com', '123', 1, 'vendemos artes', 3, 'juninho pernambuco', NULL, NULL, NULL, 'telas', 'produção de telas', 'Telas a 8 arte'),
-('dqrtec@hotmail.com', 'a', 2, NULL, NULL, 'a', NULL, NULL, NULL, NULL, NULL, NULL),
-('daniel@123', '123', 3, 'trabalha com artesanato', 1, 'desafiando o sistema ', 'cat 1', 'sempre i', 1, 'artesanato jovem infantil', 'sarvico 1', 'como desfiar daniel'),
-('b@hotmail.com', 'b', 4, NULL, NULL, 'b', NULL, NULL, NULL, NULL, NULL, NULL);
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `segmento`
---
-
-CREATE TABLE `segmento` (
-  `seg_id` int(11) NOT NULL,
-  `seg_nome` varchar(60) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Extraindo dados da tabela `segmento`
---
-
-INSERT INTO `segmento` (`seg_id`, `seg_nome`) VALUES
-(1, 'artesanato'),
-(2, 'escultura');
-
---
--- Índices para tabelas despejadas
+-- Indexes for dumped tables
 --
 
 --
--- Índices para tabela `endereco`
+-- Indexes for table `endereco`
 --
 ALTER TABLE `endereco`
   ADD PRIMARY KEY (`end_id`);
 
 --
--- Índices para tabela `evento`
+-- Indexes for table `evento`
 --
 ALTER TABLE `evento`
   ADD PRIMARY KEY (`eve_id`),
   ADD KEY `const_eve_end` (`eve_end_id`);
 
 --
--- Índices para tabela `habilidade`
---
-ALTER TABLE `habilidade`
-  ADD PRIMARY KEY (`hab_id`);
-
---
--- Índices para tabela `habilidade_segmento`
---
-ALTER TABLE `habilidade_segmento`
-  ADD PRIMARY KEY (`hs_hab_id`,`hs_seg_id`),
-  ADD KEY `const_hab_seg_seg` (`hs_seg_id`);
-
---
--- Índices para tabela `radar`
+-- Indexes for table `radar`
 --
 ALTER TABLE `radar`
   ADD PRIMARY KEY (`rad_role`),
   ADD UNIQUE KEY `rad_email` (`rad_email`),
-  ADD KEY `const_rad_end` (`rad_end_id`),
-  ADD KEY `const_rad_seg` (`rad_seg_id`);
+  ADD KEY `const_rad_end` (`rad_end_id`);
 
 --
--- Índices para tabela `segmento`
---
-ALTER TABLE `segmento`
-  ADD PRIMARY KEY (`seg_id`);
-
---
--- AUTO_INCREMENT de tabelas despejadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de tabela `endereco`
+-- AUTO_INCREMENT for table `endereco`
 --
 ALTER TABLE `endereco`
-  MODIFY `end_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `end_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de tabela `evento`
+-- AUTO_INCREMENT for table `evento`
 --
 ALTER TABLE `evento`
-  MODIFY `eve_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `eve_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de tabela `habilidade`
---
-ALTER TABLE `habilidade`
-  MODIFY `hab_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT de tabela `radar`
+-- AUTO_INCREMENT for table `radar`
 --
 ALTER TABLE `radar`
-  MODIFY `rad_role` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `rad_role` int(30) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de tabela `segmento`
---
-ALTER TABLE `segmento`
-  MODIFY `seg_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- Restrições para despejos de tabelas
+-- Constraints for dumped tables
 --
 
 --
@@ -249,18 +132,10 @@ ALTER TABLE `evento`
   ADD CONSTRAINT `const_eve_end` FOREIGN KEY (`eve_end_id`) REFERENCES `endereco` (`end_id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --
--- Limitadores para a tabela `habilidade_segmento`
---
-ALTER TABLE `habilidade_segmento`
-  ADD CONSTRAINT `const_hab_seg_hab` FOREIGN KEY (`hs_hab_id`) REFERENCES `habilidade` (`hab_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `const_hab_seg_seg` FOREIGN KEY (`hs_seg_id`) REFERENCES `segmento` (`seg_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Limitadores para a tabela `radar`
 --
 ALTER TABLE `radar`
-  ADD CONSTRAINT `const_rad_end` FOREIGN KEY (`rad_end_id`) REFERENCES `endereco` (`end_id`) ON DELETE SET NULL ON UPDATE SET NULL,
-  ADD CONSTRAINT `const_rad_seg` FOREIGN KEY (`rad_seg_id`) REFERENCES `segmento` (`seg_id`) ON DELETE SET NULL ON UPDATE SET NULL;
+  ADD CONSTRAINT `const_rad_end` FOREIGN KEY (`rad_end_id`) REFERENCES `endereco` (`end_id`) ON DELETE SET NULL ON UPDATE SET NULL;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

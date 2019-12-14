@@ -56,6 +56,14 @@ app.get('/api/radar/:id',(req, res) => {
     res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
   });
 });
+
+app.get('/api/endereco/:id',(req, res) => {
+  let sql = "SELECT * FROM endereco WHERE end_id="+req.params.id;
+  let query = conn.query(sql, (err, results) => {
+    if(err) throw err;
+    res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+  });
+});
  
 //add new product
 app.post('/api/user',(req, res) => {
@@ -75,12 +83,30 @@ app.post('/api/user/login',(req, res) => {
     res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
   });
 });
- 
+
+app.post('/api/endereco',(req, res) => {
+
+  let data = {end_latitude: req.body.end_latitude, end_longitude: req.body.end_longitude};
+  let sql = "INSERT INTO endereco SET ?";
+  let query = conn.query(sql, data,(err, results) => {
+    if(err) throw err;
+    res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+  });
+});
+
 //update product
 app.post('/api/radar/atualizar/',(req, res) => {
-  let data = {rad_titulo:req.body.rad_titulo, rad_tags:req.body.rad_tags, rad_informacao_adicional:req.body.rad_informacao_adicional, rad_descricao:req.body.rad_descricao}
-  console.log(data)
+  let data = {rad_titulo:req.body.rad_titulo, rad_tags:req.body.rad_tags, rad_informacao_adicional:req.body.rad_informacao_adicional, rad_descricao:req.body.rad_descricao, rad_end_id:req.body.rad_end_id}
   let sql = "UPDATE radar SET ? WHERE rad_role="+req.body.rad_role;
+  let query = conn.query(sql, data ,(err, results) => {
+    if(err) throw err;
+    res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+  });
+});
+
+app.post('/api/endereco/atualizar/:id',(req, res) => {
+  let data = {end_latitude:req.body.end_latitude, end_longitude:req.body.end_longitude}
+  let sql = "UPDATE endereco SET ? WHERE end_id="+req.params.id;
   let query = conn.query(sql, data ,(err, results) => {
     if(err) throw err;
     res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
